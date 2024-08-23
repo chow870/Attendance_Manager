@@ -8,7 +8,7 @@ function Tschedule({Today_classes}){
             const form= document.getElementById("myform");
             const formData= new FormData(form);
            
-            // TODO : add the userName from the token available in the localHost.
+            //  TODO : add the userName from the token available in the localHost.
 
             console.log(formData);
             try{
@@ -42,17 +42,24 @@ function Tschedule({Today_classes}){
     return(
         <>
             <form id ="myForm" onSubmit={submitHandler()}>
-                    {Today_classes.forEach((element)=> {
+                    {Today_classes.forEach((element,index)=> {
                         // array of objects
-                        <div>
+                        <div id={index}>
                             <p>here will come name of class</p>
                             <p>time</p>
                             <p>venue</p>
                             <p>proffesor</p>
                             <p>credit</p>
                             <label for="status">Did You attend the class ?</label>
-                            <input type="checkbox"  name="status" value="Yes"/>
-                            <input type="checkbox"  name="status" value="No"/>
+                            <input type="checkbox"  name="status" value="Yes"
+                                onChange={()=>{
+                                    // here have to attach a css to make it turn green 
+                                }}
+                            />
+                            <input type="checkbox"  name="status" value="No"
+                                onChange={()=>{
+                                    // here have to attach a css to make it turn mild red.
+                                }}/>
         
                         </div>
                         
