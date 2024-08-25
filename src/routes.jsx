@@ -17,8 +17,6 @@ mongoose.connect(process.env.MONGODB_KEY,{
   });
 
 
-
-
 app.get("/dashboard/allrecords",async (req,res)=>{
     // here i am supposed to give all the records, grouped by the "date" and hide the username, sort in decreasing fashion by date
     // you have to give the username for this purpose.
@@ -139,7 +137,71 @@ app.get("/dashboard/attendance",async (req,res)=>{
 
 })
 
+app.get("/dashboard/classesMissed",async(req,res)=>{
+    let {sdate,edate,selectedSubject}=req.body;
+    console.log(sdate, edate, selectedSubject);
 
+    async function getFilteredRecords(username, sdate, edate, selectedSubjects) {
+        try {
+            const records = await Record.aggregate([
+                // Match documents with the specified username, date range, subjects, and excluding "No" status
+                {
+                    $match: {
+                        username: username,
+                        status: { $ne: "No" },
+                        date: {
+                            $gte: sdate, // Direct string comparison
+                            $lte: edate  // Direct string comparison
+                        },
+                        subject: { $in: selectedSubjects }
+                    }
+                },
+                
+                // Group by subject
+                {
+                    $group: {
+                        _id: "$subject", // Group by subject
+                        records: {
+                            $push: {
+                                date: "$date",
+                                credit: "$credit",
+                                professor: "$professor",
+                                time: "$time",
+                                venue: "$venue",
+                                status: "$status"
+                            }
+                        }
+                    }
+                },
+    
+                // Optionally sort each subject's records by date in descending order
+                {
+                    $sort: { "records.date": -1 }
+                },
+    
+                // Rename fields to match the desired output structure
+                {
+                    $project: {
+                        _id: 0,
+                        subject: "$_id",
+                        records: 1
+                    }
+                }
+            ]);
+    
+            console.log(records);
+            return res.json({
+                rec:records
+            });
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+    await getFilteredRecords(username, sdate, edate, selectedSubject);
+
+
+})
 app.listen('3000',()=>{
     console.log("listening at port : 3000");
 })
