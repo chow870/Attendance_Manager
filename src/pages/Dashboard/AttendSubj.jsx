@@ -12,10 +12,10 @@ function AttendSubj(){
             });
             let data= response.json();
             // need to see how is the response in this.
-            setRecords(data);
+            setRecords(data.attendance);
             // thr data will be grouped by dates.
         }
-
+        GetAllRec();
     },[]);
     return (
         <>
@@ -23,22 +23,10 @@ function AttendSubj(){
                 records.map((element,index)=>{
                     <div key={index}>
                         <h3>Here will come the subject : {element.subject}</h3>
-                        {element.rec.map((ele,ind)=>{
-                            <div key={index} 
-                            className={element.status=="yes"? "":""}>
-                                <h3>HERE WILL COME THE DATE {element.date}</h3>
-                                <></>
-                                <></>
-                                <></>
-                                <></>
-                                <br></br>
-                            </div>
-
-                        })}
-
+                        <p>Classes Attended: {element.totalYes}</p>
+                        <p>Classes Missed: {element.totalNo}</p>
+                        <p>Percentage : {element.percentageAttended}</p>
                     </div>
-                    
-
                 })
             }
         </>
