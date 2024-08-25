@@ -20,14 +20,18 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
             // Get the ID of the form
              const formId = formElement.id;
              const index= formId.split(':')[1];
+             const timestamp = Date.now();
+             const date = new Date(timestamp).toISOString();
+             const arr= date.split('T');
              let formData={
                 username:"Aditya Choudhary",
                 subject: document.getElementById(`${index}subject`).textContent,
                 credit: document.getElementById(`${index}credit`).textContent,
-                proffesor: document.getElementById(`${index}proffesor`).textContent,
+                professor: document.getElementById(`${index}proffesor`).textContent,
                 time: document.getElementById(`${index}time`).textContent,
                 venue: document.getElementById(`${index}venue`).textContent,
-                status:document.getElementById(`${index}status`).value
+                status:document.getElementById(`${index}status`).value,
+                date:arr[0]
              };
 
            
