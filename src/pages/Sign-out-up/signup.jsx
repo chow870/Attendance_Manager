@@ -58,3 +58,4 @@ return (
     </>
 )
 }
+export default SignupForm;
