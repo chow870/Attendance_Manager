@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CustomisedSigninForm from "./SignIn/SigninForm";
+import CustomisedSigninForm from "./SigninForm";
 
 const RegistrationForm = () => {
   const [username, setUsername] = useState("");
