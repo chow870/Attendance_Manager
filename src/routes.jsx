@@ -2,6 +2,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 const Record=require('./Model/Records_Model');
+const Record=require('./Model/Users_Model');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
@@ -202,6 +203,39 @@ app.get("/dashboard/classesMissed",async(req,res)=>{
 
 
 })
+app.get("/signin/check-username", (req, res) => {
+    const username = req.query.username; // Accessing the query parameter
+  
+    // Example logic to check if the username is unique
+    // here i will have to check with the User_schema data base
+    if (username === "existingUser") {
+      res.json({ isUnique: false });
+    } else {
+      res.json({ isUnique: true });
+    }
+  });
+
+
+app.post('/signin/submit', async (req, res) => {
+    try {
+      const { username, dailyRecords } = req.body;
+  
+      // Create a user document to insert
+      const user = new Users({
+        username: username,
+        dailyRecords: dailyRecords
+      });
+
+      const result = await user.save(); 
+  
+      // Respond with success
+      res.status(200).json({ message: 'Record inserted successfully', data: result });
+    } catch (error) {
+      console.error('Error inserting record:', error);
+      res.status(500).json({ message: 'Error inserting record', error: error.message });
+    }
+  });
+
 app.listen('3000',()=>{
     console.log("listening at port : 3000");
 })
