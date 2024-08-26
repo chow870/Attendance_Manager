@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import CustomisedSigninForm from "./SignIn/SigninForm";
 
 const RegistrationForm = () => {
   const [username, setUsername] = useState("");
@@ -56,6 +57,7 @@ const RegistrationForm = () => {
         {isUsernameUnique && (
           <div>
             {/* here i will now put the customised form data */}
+            <CustomisedSigninForm username={username}/>
           </div>
         )}
       </form>

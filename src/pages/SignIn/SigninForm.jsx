@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-function RegistrationForm({ username }) {
+function CustomisedSigninForm({ username }) {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const [password, setPassword] = useState(''); // Store password separately
   const [formData, setFormData] = useState({
@@ -15,9 +15,30 @@ function RegistrationForm({ username }) {
     }, [])
   });
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value); // Store password
+  const handlePasswordChange = async (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword); // Update state
+  
+    try {
+      let response = await fetch("/api/saveCredentials", {  // Assuming you have a specific endpoint
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ username: username, password: newPassword }) // Use newPassword directly
+      });
+  
+      let data = await response.json();
+      if (response.ok) {
+        console.log("UserCredentials saved properly");
+      } else {
+        console.log("UserCredentials was not saved successfully", data.message);
+      }
+    } catch (error) {
+      console.error("Error while connecting or submitting the form", error);
+    }
   };
+  
 
   const handleDailyRecordChange = (day, index, e) => {
     const { name, value } = e.target;
@@ -136,4 +157,4 @@ function RegistrationForm({ username }) {
   );
 }
 
-export default RegistrationForm;
+export default CustomisedSigninForm;

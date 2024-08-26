@@ -2,8 +2,10 @@
 import express from 'express';
 import mongoose from 'mongoose';
 const Record=require('./Model/Records_Model');
-const Record=require('./Model/Users_Model');
+const Users=require('./Model/Users_Model');
+const UsersCred=require('./Model/UsersCred');
 const bodyParser = require('body-parser');
+
 const cors = require('cors');
 
 app.use(cors());
@@ -205,10 +207,12 @@ app.get("/dashboard/classesMissed",async(req,res)=>{
 })
 app.get("/signin/check-username", (req, res) => {
     const username = req.query.username; // Accessing the query parameter
-  
-    // Example logic to check if the username is unique
-    // here i will have to check with the User_schema data base
-    if (username === "existingUser") {
+
+    const existingUser=UsersCred.findOne({
+        username:username
+    });
+
+    if (existingUser) {
       res.json({ isUnique: false });
     } else {
       res.json({ isUnique: true });
@@ -235,6 +239,29 @@ app.post('/signin/submit', async (req, res) => {
       res.status(500).json({ message: 'Error inserting record', error: error.message });
     }
   });
+
+app.post("/signin/Credentials", async (req, res) => {
+    try{
+    const {username,password} = req.body; // Accessing the query parameter
+  
+    // Example logic to check if the username is unique
+    // here i will have to check with the User_schema data base
+    const Cred= new UsersCred({
+        username:username,
+        password:password
+    });
+    const result = await Cred.save();
+    res.status(200).json({ message: 'Record inserted successfully', data: result,
+        Ok:"true"
+     });
+
+    }
+    catch (error){
+        console.error('Error inserting record:', error);
+        res.status(500).json({ message: 'Error inserting record', error: error.message,ok:"false" });
+
+    }
+  });  
 
 app.listen('3000',()=>{
     console.log("listening at port : 3000");
