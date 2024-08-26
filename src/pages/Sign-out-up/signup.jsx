@@ -1,4 +1,5 @@
 import { useState,useEffect } from "react";
+import SignOut from "./signout";
 function SignupForm(){
     const {username,setUsername}=useState("");
     const {password,setPassword}=useState("");
@@ -52,6 +53,7 @@ return (
         
     />
     <button type="button" onClick={handler}> Submit </button>
+    <SignOut/>
     
     </>
 )

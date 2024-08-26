@@ -283,7 +283,7 @@ app.get("/signup", async (req, res) => {
         }
         else{
             // a valid user. now apply the jwt concept to store the token.
-            var token= jwt.sign({username:username},process.env.JTW_KEY);
+            var token= jwt.sign({username:username},process.env.JWT_KEY);
             return res.status(200).json({ 
                 token:token
              });
