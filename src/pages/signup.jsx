@@ -10,10 +10,21 @@ function SignupForm(){
               },
             body:JSON.stringify({username:username,password:password})
         });
-        let data= await response.json();
-        // now bring the token back :)
+        if(response && response.ok){
+            const data= await response.json();
+            localStorage.setItem('token', data.token);
+            // navigate to dashboard.
 
-
+        }
+        else{
+            if(response && response.status==400){
+                // navigate to sigin page plz/ new user
+            }
+           else{
+            // generate an alert to refresh the page
+           }
+        }
+        
     }
 
 

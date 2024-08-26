@@ -5,6 +5,8 @@ const Record=require('./Model/Records_Model');
 const Users=require('./Model/Users_Model');
 const UsersCred=require('./Model/UsersCred');
 const bodyParser = require('body-parser');
+const bcrypt = require("bcryptjs");
+const jwt= require("jsonwebtoken");
 
 const cors = require('cors');
 
@@ -246,9 +248,13 @@ app.post("/signin/Credentials", async (req, res) => {
   
     // Example logic to check if the username is unique
     // here i will have to check with the User_schema data base
+    const hashedPassword = await bcrypt.hash(password, 8)
+    console.log(password);
+    console.log(hashedPassword);
+
     const Cred= new UsersCred({
         username:username,
-        password:password
+        password:hashedPassword
     });
     const result = await Cred.save();
     res.status(200).json({ message: 'Record inserted successfully', data: result,
@@ -263,6 +269,31 @@ app.post("/signin/Credentials", async (req, res) => {
     }
   });  
 
+app.get("/signup", async (req, res) => {
+    const {username,password} = req.query.username; // Accessing the query parameter
+
+    const existingUser= await UsersCred.findOne({
+        username:username
+    });
+
+    if (existingUser) {
+        const isMatch = await bcrypt.compare(password, existingUser.password);
+        if(!isMatch){
+            return res.status(401);
+        }
+        else{
+            // a valid user. now apply the jwt concept to store the token.
+            var token= jwt.sign({username:username},process.env.JTW_KEY);
+            return res.status(200).json({ 
+                token:token
+             });
+        }
+      
+    } else {
+        // no user found actually.
+      res.status(400);
+    }
+  });
 app.listen('3000',()=>{
     console.log("listening at port : 3000");
 })
