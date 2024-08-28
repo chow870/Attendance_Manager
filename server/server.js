@@ -16,7 +16,7 @@ app.use(bodyParser.json()); // Parse application/json
 app.use(bodyParser.urlencoded({ extended: true })); // Parse application/x-www-form-urlencoded
 
 // Database Connection
-mongoose.connect("mongodb+srv://adi228_ch:dropper%40870@chowji.k9m7ytj.mongodb.net/25AugTest", {
+mongoose.connect("mongodb+srv://adi228_ch:dropper%40870@chowji.k9m7ytj.mongodb.net/", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
