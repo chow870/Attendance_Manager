@@ -4,6 +4,7 @@ import axios from 'axios';
 function CustomisedSigninForm({ username }) {
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   const [password, setPassword] = useState(''); // Store password separately
+  const [isPasswordSet,setIsPasswordSet] =useState(false);
   const [formData, setFormData] = useState({
     username: username,
     dailyRecords: daysOfWeek.reduce((acc, day) => {
@@ -16,8 +17,12 @@ function CustomisedSigninForm({ username }) {
   });
 
   const handlePasswordChange = async (e) => {
+    if(isPasswordSet){
+      return ;
+    }
     const newPassword = e.target.value;
     setPassword(newPassword); // Update state
+    setIsPasswordSet(true);
   
     try {
       let response = await fetch("/signin/Credentials", {  // Assuming you have a specific endpoint
@@ -74,11 +79,15 @@ function CustomisedSigninForm({ username }) {
     e.preventDefault();
     try {
       const { username, dailyRecords } = formData; // Exclude password
-      const response = await axios.post('http://localhost:5173/signin/submit', JSON.stringify({ username, dailyRecords }), {
+      console.log(formData);
+      const response = await axios.post('/signin/submit', JSON.stringify({ username:username, dailyRecords
+        :dailyRecords
+       }), {
         headers: {
           'Content-Type': 'application/json'
         }
       });
+      console.log("the response here is :"); // Handle response
       console.log(response.data); // Handle response
     } catch (error) {
       console.error('Error submitting form', error);
@@ -88,16 +97,13 @@ function CustomisedSigninForm({ username }) {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Username:</label>
-        <p>{username}</p> {/* Display username */}
-      </div>
-      <div>
         <label>Password:</label>
         <input
           type="password"
           name="password"
           value={password}
           onChange={handlePasswordChange}
+          // password handle properly
         />
       </div>
       {formData.dailyRecords.map(dayRecord => (

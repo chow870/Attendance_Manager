@@ -1,7 +1,5 @@
 const mongoose = require('mongoose');
 
-
-
   const Schedule_schema=new mongoose.Schema({
     subject: {
         type: String,
@@ -24,7 +22,8 @@ const mongoose = require('mongoose');
     status:{
         type:String,
         default:"NULL",
-    }
+    },
+    
 
   });
 
@@ -33,7 +32,8 @@ const mongoose = require('mongoose');
             type:String,
         },
         
-        Schedule:[Schedule_schema]
+        Schedule:[Schedule_schema],
+        
        
   });
 
@@ -43,7 +43,8 @@ const UserSchema = new mongoose.Schema({  // this is what it will be stored on t
       required: true,
     },
     // email
-    DailyRecords:[DailyRecords_schema],         
+    DailyRecords:[DailyRecords_schema],
+           
   });
 
 const Users = mongoose.model('Users', UserSchema);

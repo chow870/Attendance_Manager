@@ -9,14 +9,14 @@ const Users = require('/home/chow228/Desktop/DEV/Attendance_Manager2/server/Mode
 const UsersCred = require('/home/chow228/Desktop/DEV/Attendance_Manager2/server/Model/UsersCred.cjs');
 
 const app = express(); // Initialize Express app
-
+// mongoose.set('debug', true);
 // Middleware
 app.use(cors()); // Enable CORS for all origins
 app.use(bodyParser.json()); // Parse application/json
 app.use(bodyParser.urlencoded({ extended: true })); // Parse application/x-www-form-urlencoded
 
 // Database Connection
-mongoose.connect("mongodb+srv://adi228_ch:dropper%40870@chowji.k9m7ytj.mongodb.net/", {
+mongoose.connect("mongodb://localhost:27017/", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
@@ -230,11 +230,12 @@ app.get("/signin/check-username", async (req, res) => {
 app.post('/signin/submit', async (req, res) => {
     try {
       const { username, dailyRecords } = req.body;
+      console.log(dailyRecords);
   
       // Create a user document to insert
       const user = new Users({
         username: username,
-        dailyRecords: dailyRecords
+        DailyRecords: dailyRecords
       });
 
       const result = await user.save(); 
@@ -299,6 +300,168 @@ app.get("/signup", async (req, res) => {
       res.status(400);
     }
   });
+
+//   the routes for fetching the schedule of the days
+app.get("/schedule/today", async(req,res)=>{
+    const username = "Aditya";  
+    const dayOfWeek = "Wednesday";  
+
+try{const pipeline = [
+  {
+    $match: {
+      username: username
+    }
+  },
+  {
+    $unwind: "$DailyRecords"
+  },
+  {
+    $match: {
+      "DailyRecords.day": dayOfWeek
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      schedule: "$DailyRecords.Schedule"
+    }
+  },
+  {
+    $unwind: "$schedule"
+  },
+  {
+    $project: {
+      subject: "$schedule.subject",
+      professor: "$schedule.professor",
+      credit: "$schedule.credit",
+      venue: "$schedule.venue",
+      time: "$schedule.time",
+      status: "$schedule.status"
+    }
+  }
+];
+
+// Execute the aggregation pipeline
+let result = await Users.aggregate(pipeline);
+console.log("the output fetched is : ", result);
+return res.status(200).json({
+    result:result
+});
+}
+catch(error){
+    console.error("Some error in the fecthing the today records",error);
+    return res.status(400);
+
+}
+});
+
+app.get("/schedule/Yesterday", async(req,res)=>{
+    const username = "Aditya";  
+    const dayOfWeek = "Tuesday";  
+
+try{const pipeline = [
+  {
+    $match: {
+      username: username
+    }
+  },
+  {
+    $unwind: "$DailyRecords"
+  },
+  {
+    $match: {
+      "DailyRecords.day": dayOfWeek
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      schedule: "$DailyRecords.Schedule"
+    }
+  },
+  {
+    $unwind: "$schedule"
+  },
+  {
+    $project: {
+      subject: "$schedule.subject",
+      professor: "$schedule.professor",
+      credit: "$schedule.credit",
+      venue: "$schedule.venue",
+      time: "$schedule.time",
+      status: "$schedule.status"
+    }
+  }
+];
+
+// Execute the aggregation pipeline
+let result = await Users.aggregate(pipeline);
+console.log("the output fetched is : ", result);
+console.log(result);
+return res.status(200).json({
+    result:result
+});
+}
+catch(error){
+    console.error("Some error in the fecthing the today records",error);
+    return res.status(400);
+
+}
+});
+
+app.get("/schedule/Tomorrow", async(req,res)=>{
+    const username = "Aditya";  
+    const dayOfWeek = "Thursday";  
+
+try{const pipeline = [
+  {
+    $match: {
+      username: username
+    }
+  },
+  {
+    $unwind: "$DailyRecords"
+  },
+  {
+    $match: {
+      "DailyRecords.day": dayOfWeek
+    }
+  },
+  {
+    $project: {
+      _id: 0,
+      schedule: "$DailyRecords.Schedule"
+    }
+  },
+  {
+    $unwind: "$schedule"
+  },
+  {
+    $project: {
+      subject: "$schedule.subject",
+      professor: "$schedule.professor",
+      credit: "$schedule.credit",
+      venue: "$schedule.venue",
+      time: "$schedule.time",
+      status: "$schedule.status"
+    }
+  }
+];
+
+// Execute the aggregation pipeline
+let result = await Users.aggregate(pipeline);
+console.log("the output fetched is : ", result);
+return res.status(200).json({
+    result:result
+});
+}
+catch(error){
+    console.error("Some error in the fecthing the today records",error);
+    return res.status(400);
+
+}
+});
+
 app.listen(8080,()=>{
     console.log("listening at port : 8080");
 })

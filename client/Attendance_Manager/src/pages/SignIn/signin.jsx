@@ -34,15 +34,6 @@ const RegistrationForm = () => {
     }
   };
 
-  // Handle form submission
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (isUsernameUnique) {
-      
-  //     console.log("Form submitted successfully");
-  //   }
-  // };
-
   return (
     <div>
       <div>
