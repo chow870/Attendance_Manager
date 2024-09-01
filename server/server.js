@@ -27,7 +27,8 @@ mongoose.connect("mongodb://localhost:27017/", {
 app.get("/dashboard/allrecords",async (req,res)=>{
     // here i am supposed to give all the records, grouped by the "date" and hide the username, sort in decreasing fashion by date
     // you have to give the username for this purpose.
-    let username="Aditya Choudhary";
+    console.log("reached the backend of all records");
+    let username="Aditya ";
     async function getRecordsByUsername(username) {
         try {
             const records = await Record.aggregate([
@@ -81,7 +82,7 @@ app.get("/dashboard/allrecords",async (req,res)=>{
 app.get("/dashboard/attendance",async (req,res)=>{
     // here i am supposed to give all the records, grouped by the "date" and hide the username, sort in decreasing fashion by date
     // you have to give the username for this purpose.
-    let username="Aditya Choudhary";
+    let username="Aditya ";
     async function getAttendanceByUsername(username) {
         try {
             const attendance = await Record.aggregate([
@@ -145,8 +146,10 @@ app.get("/dashboard/attendance",async (req,res)=>{
 })
 
 app.get("/dashboard/classesMissed",async(req,res)=>{
-    let {sdate,edate,selectedSubject}=req.body;
+    let {sdate,edate,selectedSubject}=req.query;
     console.log(sdate, edate, selectedSubject);
+    console.log("reached the backend")
+    const username="Aditya ";
 
     async function getFilteredRecords(username, sdate, edate, selectedSubjects) {
         try {

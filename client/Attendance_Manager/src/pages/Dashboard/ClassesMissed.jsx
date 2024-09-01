@@ -3,10 +3,10 @@ import { useParams } from 'react-router-dom';
 
 
 function MissedClasses(){
-    const {records,setRecords}=useState([[{}]]);   
-    const {subject,setSubject}=useState([]);
-    const {startDate,setstartDate}=useState("");
-    const {endDate,setendDate}=useState("");
+    const [records,setRecords]=useState([]);   
+    const [subject,setSubject]=useState(["PHYSICS"]);
+    const [startDate,setstartDate]=useState("");
+    const [endDate,setendDate]=useState("");
 
     useEffect(()=>{
         // here write to fetch all the subjects.
@@ -26,32 +26,33 @@ function MissedClasses(){
 
          
          let formData={
-            username:"Aditya Choudhary",
-            sDate: startDate.length==0 ? seDate: startDate,
-            eDate: endDate.length==0 ? seDate: endDate,
+            username:"Aditya ",
+            sDate: startDate.length == 0 ? seDate: startDate,
+            eDate: endDate.length == 0 ? seDate: endDate,
             subjects:values
          };
 
        
        
         //  TODO : add the userName from the token available in the localHost.
-
+        console.log("the form data is : ");
         console.log(formData);
+        // let {sdate,edate,selectedSubject}
         try{
-            let response =await fetch("",{
+            let response =await fetch(`/dashboard/classesMissed?sdate=${formData.sDate}&edate=${formData.eDate}&subjects=${formData.subjects}`,{
             method:"GET",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body:JSON.stringify(formData)
             });
+            console.log("")
             console.log("object created");
-            let data= response.json();
-            await setRecords(data.rec);
+            let data= await response.json();
+            setRecords(data.rec);
             console.log("record updated");
         }
-        catch{
-            console.log("some Error Has occured while creation")
+        catch(error){
+            console.log("some Error Has occured while creation",error);
 
         }
         // so that i can fetch the new updated schedule and apply green or red color when rendered later.
@@ -78,9 +79,9 @@ function MissedClasses(){
                 />
                 <label> Subjects : </label>
                 <select name="subjects" id="subject" multiple>
-                    {subject.map((element)=>{
+                    {subject.map((element,index)=>{
                         return (
-                            <option value= {`${element}`} >{element}</option>
+                            <option key={index} value= {`${element}`} >{element}</option>
                         )
                     })}
                 </select>
@@ -90,11 +91,13 @@ function MissedClasses(){
             {
                 records.length ?
                 records.map((element,index)=>{
+                    return (
                     <div key={index}>
                         <h3>Here will come the subject : {element.subject}</h3>
                         {element.records.map((ele,ind)=>{
                             // each ele is itself an object
-                            <div key={ind} >                               
+                            return (
+                            <div key = {`${ind}`} >                               
                             {/* try to add the color wala effect in this */}
                                 <p>Date: {ele.date}</p>
                                 <p>Time: {ele.time}</p>
@@ -103,11 +106,9 @@ function MissedClasses(){
                                 <p>Venue : {ele.venue}</p>
                                 <p>Status :{ele.status}</p>
 
-                            </div>
+                            </div>)
                         })}  
-                    </div>
-                    
-
+                    </div>)
                 }) :<> </>
             }
         </>
