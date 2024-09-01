@@ -1,6 +1,11 @@
 import { useState,useEffect } from "react";
 
 function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}){
+    useEffect(()=>{
+        console.log("today's class : ",Today_classes);
+        console.log("yesterday's class : ",Yest_classes);
+        console.log("tomorrow's class : ",Tom_classes);
+    },[])
 
     async function SetToday_class() {
         try {
@@ -57,79 +62,81 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
             // so that i can fetch the new updated schedule and apply green or red color when rendered later.
             
     }
-    return (
-        <></>
-    )
-    // return(
-    //     <> 
-    //         {/* for today wala done hai */}
+    
+    return(
+        <> 
+            {/* for today wala done hai */}
             
-    //                 {Today_classes.map((element,index)=> {
-    //                     // array of objects
-    //                     <form id ={`myform:${index}`} key ={`myform:${index}`} onSubmit={submitHandler}>
-    //                                 <div id={`${index}`} key={index} 
-    //                                 // appropriate classes to be applied for this .
-    //                                     // className={element.status=="Yes"? "": element.status=="No" ? "":""}
-    //                                 >
-    //                                     <p id={`${index}subject`}>{element.subject}</p>
-    //                                     <p id={`${index}credit`}>{element.credit}</p>
-    //                                     <p id={`${index}proffesor`}>{element.proffesor}</p>
-    //                                     <p id={`${index}time`}>{element.time} </p>
-    //                                     <p id={`${index}venue`}>{element.venue}</p>
+                    {Today_classes.map((element,index)=> {
+                        // array of objects
+                        return (
+                        <form id ={`myform:${index}`} key ={`myform:${index}`} onSubmit={submitHandler}>
+                                    <div id={`${index}`} key={index} 
+                                    // appropriate classes to be applied for this .
+                                    // className={element.status=="Yes"? "": element.status=="No" ? "":""}
+                                    >
+                                        <p id={`${index}subject`}>{element.subject}</p>
+                                        <p id={`${index}credit`}>{element.credit}</p>
+                                        <p id={`${index}proffesor`}>{element.proffesor}</p>
+                                        <p id={`${index}time`}>{element.time} </p>
+                                        <p id={`${index}venue`}>{element.venue}</p>
                                 
-    //                                     {element.status == "NULL" ? (
-    //                                             <>
-    //                                                 <label htmlFor="status">Did You attend the class?</label>
-    //                                                 <select id={`${index}status`} name="status">
-    //                                                     <option value="Yes">Yes</option>
-    //                                                     <option value="No">No</option>
-    //                                                 </select>
-    //                                             </>) : null
-    //                                     }
-    //                     </div>
-    //                 </form>
+                                        {element.status == "NULL" ? (
+                                                <>
+                                                    <label htmlFor="status">Did You attend the class?</label>
+                                                    <select id={`${index}status`} name="status">
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No">No</option>
+                                                    </select>
+                                                </>) : null
+                                        }
+                        </div>
+                        <input type="submit"/>
+                    </form>)
                         
-    //                 })
-    //                 }
+                    })
+                    }
                     
            
-    //         <div>
-    //             <div >
-    //             {Yest_classes.map((element,index)=> {
-    //                     // array of objects
-    //                     <div id={index} 
-    //                         className={element.status=="yes"? "":""} // here apply the css 
-    //                     >
-    //                         <p>Subject Name :</p>
-    //                         <p>credit</p>
-    //                         <p>proffesor</p>
-    //                         <p>time : </p>
-    //                         <p>venue</p>
-    //                     </div>
+            <div>
+                <div >
+                {Yest_classes.map((element,index)=> {
+                        // array of objects
+                        return (
+                        <div id={index} 
+                            className={element.status=="yes"? "":""} // here apply the css 
+                        >
+                            <p>Subject Name :</p>
+                            <p>credit</p>
+                            <p>proffesor</p>
+                            <p>time : </p>
+                            <p>venue</p>
+                        </div>)
                         
-    //                 })
-    //                 }
+                    })
+                    }
                     
-    //             </div>
-    //             <div>
-    //             {Tom_classes.map((element,index)=> {
-    //                     // array of objects
-    //                     <div id={index}>
-    //                         <p>Subject Name :</p>
-    //                         <p>credit</p>
-    //                         <p>proffesor</p>
-    //                         <p>time : </p>
-    //                         <p>venue</p>
+                </div>
+                <div>
+                {Tom_classes.map((element,index)=> {
+                        // array of objects
+                        return (
+                        <div id={index}>
+                            <p>Subject Name :</p>
+                            <p>credit</p>
+                            <p>proffesor</p>
+                            <p>time : </p>
+                            <p>venue</p>
                             
-    //                     </div>
+                        </div>)
                         
-    //                 })
-    //                 }
-    //             </div>
-    //         </div>
+                    })
+                    }
+                </div>
+            </div>
 
-    //     </>
-    // )
+        </>
+    )
 
 }
 

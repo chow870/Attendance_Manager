@@ -9,7 +9,7 @@ const Users = require('/home/chow228/Desktop/DEV/Attendance_Manager2/server/Mode
 const UsersCred = require('/home/chow228/Desktop/DEV/Attendance_Manager2/server/Model/UsersCred.cjs');
 
 const app = express(); // Initialize Express app
-// mongoose.set('debug', true);
+mongoose.set('debug', true);
 // Middleware
 app.use(cors()); // Enable CORS for all origins
 app.use(bodyParser.json()); // Parse application/json
@@ -303,8 +303,9 @@ app.get("/signup", async (req, res) => {
 
 //   the routes for fetching the schedule of the days
 app.get("/schedule/today", async(req,res)=>{
-    const username = "Aditya";  
+    const username = "Aditya ";  
     const dayOfWeek = "Wednesday";  
+    console.log("reached thed backend")
 
 try{const pipeline = [
   {
