@@ -9,7 +9,7 @@ const Users = require('/home/chow228/Desktop/DEV/Attendance_Manager2/server/Mode
 const UsersCred = require('/home/chow228/Desktop/DEV/Attendance_Manager2/server/Model/UsersCred.cjs');
 
 const app = express(); // Initialize Express app
-mongoose.set('debug', true);
+// mongoose.set('debug', true);
 // Middleware
 app.use(cors()); // Enable CORS for all origins
 app.use(bodyParser.json()); // Parse application/json
@@ -304,7 +304,7 @@ app.get("/signup", async (req, res) => {
 //   the routes for fetching the schedule of the days
 app.get("/schedule/today", async(req,res)=>{
     const username = "Aditya ";  
-    const dayOfWeek = req.query.day;  
+    const dayOfWeek = "Wednesday";  
     console.log("reached thed backend")
 
 try{const pipeline = [
@@ -461,6 +461,21 @@ catch(error){
     return res.status(400);
 
 }
+});
+
+app.post('/dashboard/submit', async (req, res) => {
+  try {
+    const formData = req.body;
+    console.log(formData);
+    console.log("reached here in dashboard submit the record");
+    const result = await Record.create(formData)
+
+    // Respond with success
+    res.status(200).json({ message: 'Record inserted successfully', data: result });
+  } catch (error) {
+    console.error('Error inserting record:', error);
+    res.status(500).json({ message: 'Error inserting record', error: error.message });
+  }
 });
 
 app.listen(8080,()=>{

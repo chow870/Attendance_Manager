@@ -1,0 +1,11 @@
+/* CSS class for a light green background and bold text */
+.light-green {
+    background-color: lightgreen;
+    font-weight: bold;
+}
+
+/* CSS class for a light red background and bold text */
+.light-red {
+    background-color: lightcoral; /* Using 'lightcoral' for a light red shade */
+    font-weight: bold;
+}

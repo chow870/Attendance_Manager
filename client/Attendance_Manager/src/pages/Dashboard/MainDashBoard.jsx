@@ -1,35 +1,28 @@
 import { useState,useEffect } from "react";
+import "/home/chow228/Desktop/DEV/Attendance_Manager2/client/Attendance_Manager/src/cssClasses/greenred.css";
 
 function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}){
-    useEffect(()=>{
-        console.log("today's class : ",Today_classes);
-        console.log("yesterday's class : ",Yest_classes);
-        console.log("tomorrow's class : ",Tom_classes);
-    },[])
-
-    async function SetToday_class() {
-        try {
-            const resp = await fetch("url", { method: "GET" });
-            const data = await resp.json();
-            setToday_classes(data);
-        } catch (error) {
-            console.error("Failed to fetch today's classes:", error);
-        }
-    }
+    
 
     async function submitHandler(event){
         
             event.preventDefault();
             const formElement = event.target;
             // username actually will be received from the token/ authKey.
-            // Get the ID of the form
-             const formId = formElement.id;
-             const index= formId.split(':')[1];
-             const timestamp = Date.now();
-             const date = new Date(timestamp).toISOString();
-             const arr= date.split('T');
+            // Get the ID of the form.
+           
+            const formId = formElement.id;
+            const index= formId.split(':')[1];
+            const timestamp = Date.now();
+            const date = new Date(timestamp).toISOString();
+            const arr= date.split('T');
+            // updating the css 
+            const status= document.getElementById(`${index}status`).value;
+            const div = document.getElementById(`${index}`);
+            status=="Yes"? div.classList.add("light-green") : div.classList.add("light-red");
+
              let formData={
-                username:"Aditya Choudhary",
+                username:"Aditya ",
                 subject: document.getElementById(`${index}subject`).textContent,
                 credit: document.getElementById(`${index}credit`).textContent,
                 professor: document.getElementById(`${index}proffesor`).textContent,
@@ -45,7 +38,7 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
 
             console.log(formData);
             try{
-                await fetch("",{
+                await fetch("/dashboard/submit",{
                 method:"POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -53,7 +46,7 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
                 body:JSON.stringify(formData)
                 });
                 console.log("object created");
-                await SetToday_class();
+                // await SetToday_class();
             }
             catch{
                 console.log("some Error Has occured while creation")
@@ -75,11 +68,11 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
                                     // appropriate classes to be applied for this .
                                     // className={element.status=="Yes"? "": element.status=="No" ? "":""}
                                     >
-                                        <p id={`${index}subject`}>Subject :{element.subject}</p>
-                                        <p id={`${index}credit`}>Credit :{element.credit}</p>
-                                        <p id={`${index}proffesor`}>Proffesor :{element.proffesor}</p>
-                                        <p id={`${index}time`}>Time :{element.time} </p>
-                                        <p id={`${index}venue`}>Venue :{element.venue}</p>
+                                        <p id={`${index}subject`}>{element.subject}</p>
+                                        <p id={`${index}credit`}>{element.credit}</p>
+                                        <p id={`${index}proffesor`}>{element.proffesor}</p>
+                                        <p id={`${index}time`}>{element.time} </p>
+                                        <p id={`${index}venue`}>{element.venue}</p>
                                 
                                         {element.status == "NULL" ? (
                                                 <>
@@ -90,8 +83,9 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
                                                     </select>
                                                 </>) : null
                                         }
+                                        <input type="submit"/>
                         </div>
-                        <input type="submit"/>
+                        
                     </form>)
                         
                     })
