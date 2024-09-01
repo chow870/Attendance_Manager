@@ -5,11 +5,19 @@ function Dashboard(){
     const [Today_classes, setToday_classes]=useState([]);
     const [Yest_classes, setYest_classes]=useState([]);
     const [Tom_classes, setTom_classes]=useState([]);
+    const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+    // still you have to pass the token here to the validation and other purposes.
     useEffect(()=>{
+        const d = new Date();
         async function fetchTheClassesToday(){
-            let response= await fetch("/schedule/today",
-                {
-                    method :"GET"
+            let day = weekday[d.getDay()];
+            console.log(day);
+            let response= await fetch(`/schedule/today?day=${day}`,{
+                    method :"GET",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                      },
                 }
             )
             if(response.ok){
@@ -23,9 +31,14 @@ function Dashboard(){
             
         }
         async function fetchTheClassesYest(){
-            let response= await fetch("/schedule/Yesterday",
-                {
-                    method :"GET"
+            let d2 = d.getDay()>0 ? d.getDay()-1 : 6;
+            let day = weekday[d2];
+            console.log(day);
+            let response= await fetch(`/schedule/Yesterday?day=${day}`,{
+                    method :"GET",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                      },
                 }
             )
             if(response.ok){
@@ -35,9 +48,13 @@ function Dashboard(){
              setYest_classes(data.result);}
         }
         async function fetchTheClassesTom(){
-            let response= await fetch("/schedule/Tomorrow",
-                {
-                    method :"GET"
+            let day = weekday[(d.getDay()+1)%7];
+            console.log(day);
+            let response= await fetch(`/schedule/Tomorrow?day=${day}`,{
+                    method :"GET",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded"
+                      },
                 }
             )
             if(response.ok){

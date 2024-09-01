@@ -304,7 +304,7 @@ app.get("/signup", async (req, res) => {
 //   the routes for fetching the schedule of the days
 app.get("/schedule/today", async(req,res)=>{
     const username = "Aditya ";  
-    const dayOfWeek = "Wednesday";  
+    const dayOfWeek = req.query.day;  
     console.log("reached thed backend")
 
 try{const pipeline = [
@@ -357,8 +357,8 @@ catch(error){
 });
 
 app.get("/schedule/Yesterday", async(req,res)=>{
-    const username = "Aditya";  
-    const dayOfWeek = "Tuesday";  
+    const username = "Aditya ";  
+    const dayOfWeek = req.query.day; 
 
 try{const pipeline = [
   {
@@ -411,8 +411,8 @@ catch(error){
 });
 
 app.get("/schedule/Tomorrow", async(req,res)=>{
-    const username = "Aditya";  
-    const dayOfWeek = "Thursday";  
+    const username = "Aditya ";  
+    const dayOfWeek = req.query.day;  
 
 try{const pipeline = [
   {

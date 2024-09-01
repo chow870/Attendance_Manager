@@ -66,7 +66,7 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
     return(
         <> 
             {/* for today wala done hai */}
-            
+                    <h3>Today</h3>
                     {Today_classes.map((element,index)=> {
                         // array of objects
                         return (
@@ -75,11 +75,11 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
                                     // appropriate classes to be applied for this .
                                     // className={element.status=="Yes"? "": element.status=="No" ? "":""}
                                     >
-                                        <p id={`${index}subject`}>{element.subject}</p>
-                                        <p id={`${index}credit`}>{element.credit}</p>
-                                        <p id={`${index}proffesor`}>{element.proffesor}</p>
-                                        <p id={`${index}time`}>{element.time} </p>
-                                        <p id={`${index}venue`}>{element.venue}</p>
+                                        <p id={`${index}subject`}>Subject :{element.subject}</p>
+                                        <p id={`${index}credit`}>Credit :{element.credit}</p>
+                                        <p id={`${index}proffesor`}>Proffesor :{element.proffesor}</p>
+                                        <p id={`${index}time`}>Time :{element.time} </p>
+                                        <p id={`${index}venue`}>Venue :{element.venue}</p>
                                 
                                         {element.status == "NULL" ? (
                                                 <>
@@ -100,17 +100,17 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
            
             <div>
                 <div >
+                <h3>Yesterday</h3>
                 {Yest_classes.map((element,index)=> {
                         // array of objects
                         return (
-                        <div id={index} 
-                            className={element.status=="yes"? "":""} // here apply the css 
-                        >
-                            <p>Subject Name :</p>
-                            <p>credit</p>
-                            <p>proffesor</p>
-                            <p>time : </p>
-                            <p>venue</p>
+                        <div id={index} key={index} 
+                            className={element.status=="yes"? "":""}  >
+                            <p >Subject :{element.subject}</p>
+                            <p >Credit :{element.credit}</p>
+                            <p >Proffesor :{element.proffesor}</p>
+                            <p >Time :{element.time} </p>
+                            <p >Venue :{element.venue}</p>
                         </div>)
                         
                     })
@@ -118,15 +118,16 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
                     
                 </div>
                 <div>
+                <h3>Tomorrow</h3>
                 {Tom_classes.map((element,index)=> {
                         // array of objects
                         return (
-                        <div id={index}>
-                            <p>Subject Name :</p>
-                            <p>credit</p>
-                            <p>proffesor</p>
-                            <p>time : </p>
-                            <p>venue</p>
+                        <div id={index} key={index} >
+                           <p >Subject :{element.subject}</p>
+                            <p >Credit :{element.credit}</p>
+                            <p >Proffesor :{element.proffesor}</p>
+                            <p >Time :{element.time} </p>
+                            <p >Venue :{element.venue}</p>
                             
                         </div>)
                         
