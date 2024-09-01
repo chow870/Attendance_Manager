@@ -146,10 +146,16 @@ app.get("/dashboard/attendance",async (req,res)=>{
 })
 
 app.get("/dashboard/classesMissed",async(req,res)=>{
-    let {sdate,edate,selectedSubject}=req.query;
-    console.log(sdate, edate, selectedSubject);
-    console.log("reached the backend")
-    const username="Aditya ";
+  console.log("Received query parameters:", req.query);
+  const sDate = req.query.sdate;
+  const eDate = req.query.edate;
+  const selectedSubjects = JSON.parse(decodeURIComponent(req.query.selectedSubjects));
+
+  console.log(sDate); // Should log the start date
+  console.log(eDate); // Should log the end date
+  console.log(selectedSubjects); // Should log the array of selected subjects
+  console.log("reached the backend")
+  const username="Aditya ";
 
     async function getFilteredRecords(username, sdate, edate, selectedSubjects) {
         try {
@@ -158,7 +164,7 @@ app.get("/dashboard/classesMissed",async(req,res)=>{
                 {
                     $match: {
                         username: username,
-                        status: { $ne: "No" },
+                        status: { $eq: "No" },
                         date: {
                             $gte: sdate, // Direct string comparison
                             $lte: edate  // Direct string comparison
@@ -204,11 +210,12 @@ app.get("/dashboard/classesMissed",async(req,res)=>{
                 rec:records
             });
         } catch (err) {
+          console.log("error occured at the backend");
             console.error(err);
             throw err;
         }
     }
-    await getFilteredRecords(username, sdate, edate, selectedSubject);
+    await getFilteredRecords(username, sDate, eDate, selectedSubjects);
 
 
 })

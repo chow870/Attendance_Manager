@@ -4,15 +4,15 @@ import { useParams } from 'react-router-dom';
 
 function MissedClasses(){
     const [records,setRecords]=useState([]);   
-    const [subject,setSubject]=useState(["PHYSICS"]);
+    const [subject,setSubject]=useState(["PHYSICS "]);
     const [startDate,setstartDate]=useState("");
     const [endDate,setendDate]=useState("");
 
-    useEffect(()=>{
-        // here write to fetch all the subjects.
+    // useEffect(()=>{
+    //     // here write to fetch all the subjects.
         
 
-    },[]);
+    // },[]);
     
     async function submitHandler(event){
         
@@ -38,8 +38,10 @@ function MissedClasses(){
         console.log("the form data is : ");
         console.log(formData);
         // let {sdate,edate,selectedSubject}
+        let selectedSubjectsString = encodeURIComponent(JSON.stringify(formData.subjects));
+// let response = await fetch(`/dashboard/classesMissed?sdate=${formData.sDate}&edate=${formData.eDate}&selectedSubjects=${selectedSubjectsString}`);
         try{
-            let response =await fetch(`/dashboard/classesMissed?sdate=${formData.sDate}&edate=${formData.eDate}&subjects=${formData.subjects}`,{
+            let response =await fetch(`/dashboard/classesMissed?sdate=${formData.sDate}&edate=${formData.eDate}&selectedSubjects=${selectedSubjectsString}`,{
             method:"GET",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -85,7 +87,7 @@ function MissedClasses(){
                         )
                     })}
                 </select>
-                <input type="submit" value="Submit"/>
+                <input type="submit"/>
             </form>
 
             {
