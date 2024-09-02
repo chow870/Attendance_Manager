@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const jwt_Passowrd="12345";
 const Record = require('/home/chow228/Desktop/DEV/Attendance_Manager2/server/Model/Records_Model.cjs');
 const Users = require('/home/chow228/Desktop/DEV/Attendance_Manager2/server/Model/Users_Model.cjs');
 const UsersCred = require('/home/chow228/Desktop/DEV/Attendance_Manager2/server/Model/UsersCred.cjs');
@@ -285,32 +286,6 @@ app.post("/signin/Credentials", async (req, res) => {
     }
   });  
 
-app.get("/signup", async (req, res) => {
-    const {username,password} = req.query.username; // Accessing the query parameter
-
-    const existingUser= await UsersCred.findOne({
-        username:username
-    });
-
-    if (existingUser) {
-        const isMatch = await bcrypt.compare(password, existingUser.password);
-        if(!isMatch){
-            return res.status(401);
-        }
-        else{
-            // a valid user. now apply the jwt concept to store the token.
-            var token= jwt.sign({username:username},process.env.JWT_KEY);
-            return res.status(200).json({ 
-                token:token
-             });
-        }
-      
-    } else {
-        // no user found actually.
-      res.status(400);
-    }
-  });
-
 //   the routes for fetching the schedule of the days
 app.get("/schedule/today", async(req,res)=>{
     const username = "Aditya ";  
@@ -487,6 +462,47 @@ app.post('/dashboard/submit', async (req, res) => {
     res.status(500).json({ message: 'Error inserting record', error: error.message });
   }
 });
+
+// routes for SignUp and 
+app.post('/signup',async(req,res)=>{
+  const {username,password} = req.body;
+  try{
+    let user= await UsersCred.findOne({
+      username:username
+    });
+    if(!user){
+      return res.status(400).json({
+        msg:"A new user"
+      });
+    }
+    else{
+      // 
+      const isMatch = await bcrypt.compare(password, user.password);
+      if(isMatch){
+        var token= jwt.sign({username:username},jwt_Passowrd);
+        return res.status(200).json({ 
+            token:token
+         });
+      }
+      else{
+        return res.status(401).json({
+          msg: "invalid Password"
+        })
+      }
+  
+    }
+  }
+  catch(error){
+    console.error(error);
+    return res.status(401).json({
+      msg:"Refresh the page"
+    });
+
+  }
+  
+
+
+})
 
 app.listen(8080,()=>{
     console.log("listening at port : 8080");

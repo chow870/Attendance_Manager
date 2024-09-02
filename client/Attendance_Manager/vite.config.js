@@ -7,7 +7,8 @@ export default defineConfig({
     proxy:{
       '/signin':"http://localhost:8080",
       '/schedule':"http://localhost:8080",
-      '/dashboard':"http://localhost:8080"
+      '/dashboard':"http://localhost:8080",
+      '/signup':"http://localhost:8080"
 
     }
   },
