@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
 import "/home/chow228/Desktop/DEV/Attendance_Manager2/client/Attendance_Manager/src/cssClasses/greenred.css";
-import { Link } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 
 function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}){
     
@@ -60,13 +60,14 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
     return(
         <> 
             {/* for today wala done hai */}
-                {/* <nav>
+                <nav>
                         <ul>
-                            <li><Link to="Allrecords">AllRecords</Link></li>
-                            <li><Link to="AttendaceSubj">Attendance Subj</Link></li>
-                            <li><Link to="MissedClasses">Missed Classes</Link></li>
+                            <li><Link to="/dashboard/allrecords">AllRecords</Link></li>
+                            <li><Link to="/dashboard/attendancesubj">Attendance Subj</Link></li>
+                            <li><Link to="/dashboard/missedclasses">Missed Classes</Link></li>
                         </ul>
-                </nav> */}
+                </nav>
+                <Outlet/>
 
                     <h3>Today</h3>
                     {Today_classes.map((element,index)=> {
