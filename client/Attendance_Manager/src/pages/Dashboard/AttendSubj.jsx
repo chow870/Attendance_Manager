@@ -1,5 +1,7 @@
 import { useEffect,useState } from "react";
 import { useParams } from 'react-router-dom';
+import DonutChart from "./doughnut";
+
 
 
 function AttendSubj(){
@@ -24,10 +26,11 @@ function AttendSubj(){
                 records.map((element,index)=>{
                     return (
                     <div key={index}>
-                        <h3>Here will come the subject : {element.subject}</h3>
-                        <p>Classes Attended: {element.totalYes}</p>
-                        <p>Classes Missed: {element.totalNo}</p>
-                        <p>Percentage : {element.percentageAttended}</p>
+                        <h3>Subject : {element.subject}</h3>
+                        <DonutChart rec={[element.totalYes,element.totalNo]} percentage= {element.percentageAttended} />
+                        {/* <p>Classes Attended: {element.totalYes}</p>
+                        <p>Classes Missed: {element.totalNo}</p> */}
+                        {/* <p>Percentage : {element.percentageAttended}</p> */}
                     </div>)
                 })
             }

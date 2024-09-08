@@ -15,8 +15,8 @@ function App() {
       <>
             
                 <Routes>
-                      {/* <Route path="/" element={<RegistrationForm />} /> */}
-                      <Route path="/" element={<SignupForm />} />
+                      <Route path="/" element={<RegistrationForm />} />
+                      {/* <Route path="/" element={<SignupForm />} /> */}
                       <Route path="/Signin" element={<RegistrationForm />} />
                       {/* <Route path="/signin/forms" element={<CustomisedSigninForm />} /> */}
                       {/* <Route path="/SignOut" element={<SignOut />} /> */}
