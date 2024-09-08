@@ -95,70 +95,103 @@ function CustomisedSigninForm({ username }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Password:</label>
+    <form onSubmit={handleSubmit} className="max-w-3xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+      {/* Password Section */}
+      <div className="mb-4">
+        <label className="block text-lg font-medium mb-2">Password:</label>
         <input
           type="password"
           name="password"
           value={password}
           onChange={handlePasswordChange}
-          // password handle properly
+          className="w-full p-2 border border-gray-300 rounded"
         />
       </div>
-      {formData.dailyRecords.map(dayRecord => (
-        <div key={dayRecord.day}>
-          <h3>{dayRecord.day}</h3>
-          <label>Number of Classes:</label>
-          <input
-            type="number"
-            min={0}
-            value={dayRecord.Schedule.length}
-            onChange={(e) => handleNumClassesChange(dayRecord.day, e)}
-          />
-          {dayRecord.Schedule.map((schedule, index) => (
-            <div key={index}>
-              <h4>Class {index + 1}</h4>
-              <label>Subject:</label>
-              <input
-                type="text"
-                name="subject"
-                value={schedule.subject}
-                onChange={(e) => handleDailyRecordChange(dayRecord.day, index, e)}
-              />
-              <label>Professor:</label>
-              <input
-                type="text"
-                name="professor"
-                value={schedule.professor}
-                onChange={(e) => handleDailyRecordChange(dayRecord.day, index, e)}
-              />
-              <label>Credit:</label>
-              <input
-                type="number"
-                name="credit"
-                value={schedule.credit}
-                onChange={(e) => handleDailyRecordChange(dayRecord.day, index, e)}
-              />
-              <label>Venue:</label>
-              <input
-                type="text"
-                name="venue"
-                value={schedule.venue}
-                onChange={(e) => handleDailyRecordChange(dayRecord.day, index, e)}
-              />
-              <label>Time:</label>
-              <input
-                type="text"
-                name="time"
-                value={schedule.time}
-                onChange={(e) => handleDailyRecordChange(dayRecord.day, index, e)}
-              />
-            </div>
-          ))}
-        </div>
-      ))}
-      <button type="submit">Submit</button>
+
+      {/* Daily Records Section */}
+      {formData.dailyRecords.map((dayRecord, index) => {
+        // Assign the background color based on the day index
+        const dayColors = [
+          "#d9f99d", // Monday
+          "#a7f3d0", // Tuesday
+          "#bae6fd", // Wednesday
+          "#ddd6fe", // Thursday
+          "#f5d0fe", // Friday
+          "#fda4af", // Saturday
+          "#4ade80", // Sunday
+        ];
+
+        return (
+          <div key={dayRecord.day} className="p-4 mb-4 rounded" style={{ backgroundColor: dayColors[index] }}>
+            <h3 className="text-xl font-bold mb-2">{dayRecord.day}</h3>
+
+            {/* Number of Classes */}
+            <label className="block mb-1">Number of Classes:</label>
+            <input
+              type="number"
+              min={0}
+              value={dayRecord.Schedule.length}
+              onChange={(e) => handleNumClassesChange(dayRecord.day, e)}
+              className="mb-4 p-2 w-full border border-gray-300 rounded"
+            />
+
+            {/* Schedule Inputs */}
+            {dayRecord.Schedule.map((schedule, index) => (
+              <div key={index} className="mb-4">
+                <h4 className="text-lg font-medium mb-2">Class {index + 1}</h4>
+
+                <label className="block mb-1">Subject:</label>
+                <input
+                  type="text"
+                  name="subject"
+                  value={schedule.subject}
+                  onChange={(e) => handleDailyRecordChange(dayRecord.day, index, e)}
+                  className="mb-2 p-2 w-full border border-gray-300 rounded"
+                />
+
+                <label className="block mb-1">Professor:</label>
+                <input
+                  type="text"
+                  name="professor"
+                  value={schedule.professor}
+                  onChange={(e) => handleDailyRecordChange(dayRecord.day, index, e)}
+                  className="mb-2 p-2 w-full border border-gray-300 rounded"
+                />
+
+                <label className="block mb-1">Credit:</label>
+                <input
+                  type="number"
+                  name="credit"
+                  value={schedule.credit}
+                  onChange={(e) => handleDailyRecordChange(dayRecord.day, index, e)}
+                  className="mb-2 p-2 w-full border border-gray-300 rounded"
+                />
+
+                <label className="block mb-1">Venue:</label>
+                <input
+                  type="text"
+                  name="venue"
+                  value={schedule.venue}
+                  onChange={(e) => handleDailyRecordChange(dayRecord.day, index, e)}
+                  className="mb-2 p-2 w-full border border-gray-300 rounded"
+                />
+
+                <label className="block mb-1">Time:</label>
+                <input
+                  type="text"
+                  name="time"
+                  value={schedule.time}
+                  onChange={(e) => handleDailyRecordChange(dayRecord.day, index, e)}
+                  className="mb-2 p-2 w-full border border-gray-300 rounded"
+                />
+              </div>
+            ))}
+          </div>
+        );
+      })}
+      <button type="submit" className="p-2 w-full bg-black text-white rounded hover:bg-gray-800 transition">
+        Submit
+      </button>
     </form>
   );
 }

@@ -34,27 +34,33 @@ function SignupForm(){
 return (
    
     <>
-    <input
-        type="text"
-        placeholder="Enter Your UserName"
-        value={username}
-        onChange={(event)=>{
-            setUsername(event.target.value);
-        }
-            
-        }
-    />
-    <input
-        type="password"
-        placeholder="Enter Your Password "
-        value={password}
-        onChange={(event)=>{
-            setPassword(event.target.value);
-        }}
-        
-        
-    />
-    <button type="button" onClick={handler}> Submit </button>
+   
+    <div className="flex justify-center items-center min-h-screen bg-black">
+      <div className="bg-white w-72 h-72 p-6 rounded-lg shadow-lg backdrop-blur-sm">
+        <h2 className="text-center text-2xl font-bold mb-4">Sign In</h2>
+        <input
+          type="text"
+          placeholder="Enter Your UserName"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+          className="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+        <input
+          type="password"
+          placeholder="Enter Your Password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          className="w-full p-2 mb-4 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+        />
+        <button
+          type="button"
+          onClick={handler}
+          className="w-full p-2 bg-black text-white rounded hover:bg-gray-800 transition duration-200"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
     <SignOut/>
     
     </>

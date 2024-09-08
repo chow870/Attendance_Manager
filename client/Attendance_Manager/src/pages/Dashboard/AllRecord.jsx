@@ -25,22 +25,29 @@ function AllRecords(){
             {   // itself an array 
                 records.map((element,index)=>{
                     return (
-                    <div key={index}>
+                    <div key={index} >
                         <h3>{element.date}</h3>
                         {element.records.map((ele,ind)=>{
                             // each ele is itself an object
                             return (
-                            <div  key={ind} >                               
-                            {/* try to add the color wala effect in this */}
-                                <p>Subject: {ele.subject}</p>
-                                <p>Credit :{ele.credit}</p>
-                                <p>Professor :{ele.professor}</p>
-                                <p>Venue : {ele.venue}</p>
-                                <p>Status :{ele.status}</p>
+                                <div
+                                    key={ind}
+                                    className="mb-2 text-l font-bold tracking-tight text-black bg-[#fecaca] p-4 rounded-lg shadow-lg hover:bg-gray-700 hover:shadow-2xl hover:-translate-y-2 hover:rotate-x-4 transform transition-all duration-300 hover:scale-105"
+                                    style={{ perspective: '1000px',  overflow: 'hidden',transformOrigin: 'center',}} // To create the 3D flip effect
+                                    >
+                                    <p className="hover:text-white hover:text-shadow-glow">Subject: {ele.subject}</p>
+                                    <p className="hover:text-white hover:text-shadow-glow">Credit: {ele.credit}</p>
+                                    <p className="hover:text-white hover:text-shadow-glow">Professor: {ele.professor}</p>
+                                    <p className="hover:text-white hover:text-shadow-glow">Venue: {ele.venue}</p>
+                                    <p className="hover:text-white hover:text-shadow-glow">Status: {ele.status}</p>
+                                    </div>
 
-                            </div>)
+
+                            
+                            )
                         })}  
-                    </div>)
+                    </div>
+                    )
                 })
             }
         </>

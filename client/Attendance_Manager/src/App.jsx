@@ -11,7 +11,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 function App() {
   return (
     <>
-      <h1>hey there </h1>
       <>
             
                 <Routes>
@@ -21,11 +20,11 @@ function App() {
                       {/* <Route path="/signin/forms" element={<CustomisedSigninForm />} /> */}
                       {/* <Route path="/SignOut" element={<SignOut />} /> */}
                       <Route path="/Signup" element={<SignupForm />} />
-                      <Route path="/dashboard" element={<Dashboard />}>
-                         <Route path="allrecords" element={<AllRecords />} />
-                         <Route path="attendancesubj" element={<AttendSubj />} />
-                         <Route path="missedclasses" element={<MissedClasses />} />
-                      </Route>
+                      <Route path="/dashboard" element={<Dashboard />}/>
+                      <Route path="/allrecords" element={<AllRecords />} />
+                      <Route path="/attendancesubj" element={<AttendSubj />} />
+                      <Route path="/missedclasses" element={<MissedClasses />} />
+                      
                 </Routes>
          
        </>

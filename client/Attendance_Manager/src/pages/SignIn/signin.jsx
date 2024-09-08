@@ -35,29 +35,38 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div>
-      <div>
-        {/* Username Input */}
+    <div className="min-h-screen bg-black flex justify-center items-center">
+      <div className="bg-[#ffedd5] w-full max-w-md p-6 rounded-lg shadow-lg space-y-6">
+        {/* Username Check Section */}
         <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <button type="button" onClick={checkUsername}>
-            Check Username
-          </button>
+          <label className="block text-lg font-bold mb-2">Username:</label>
+          <div className="flex space-x-4 items-center">
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="flex-1 p-2 border border-gray-300 rounded"
+              placeholder="Enter Username"
+            />
+            <button
+              type="button"
+              onClick={checkUsername}
+              className="p-2 bg-black text-white rounded hover:bg-gray-800 transition duration-200"
+            >
+              Check Username
+            </button>
+          </div>
+
+          {/* Error Message */}
+          {errorMessage && (
+            <p className="text-red-500 mt-2">{errorMessage}</p>
+          )}
         </div>
 
-        {/* Error Message */}
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-
-        {/* Additional Form Section */}
+        {/* Customised Sign-In Form if Username is Unique */}
         {isUsernameUnique && (
-          <div>
-            {/* here i will now put the customised form data */}
-            <CustomisedSigninForm username={username}/>
+          <div className="mt-4">
+            <CustomisedSigninForm username={username} />
           </div>
         )}
       </div>

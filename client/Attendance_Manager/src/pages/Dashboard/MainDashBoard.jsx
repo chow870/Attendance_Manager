@@ -60,85 +60,48 @@ function MainDashboard({Today_classes,setToday_classes,Yest_classes,Tom_classes}
     return(
         <> 
             {/* for today wala done hai */}
-                <nav>
-                        <ul>
-                            <li><Link to="/dashboard/allrecords">AllRecords</Link></li>
-                            <li><Link to="/dashboard/attendancesubj">Attendance Subj</Link></li>
-                            <li><Link to="/dashboard/missedclasses">Missed Classes</Link></li>
-                        </ul>
-                </nav>
-                <Outlet/>
+            <nav className="bg-black p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        {/* Logo Section */}
+        <div className="text-white text-lg font-bold">
+          <Link to="/">
+            {/* Replace this text with an actual logo image */}
+            <span>Company Logo</span>
+          </Link>
+        </div>
+        
+        {/* Navigation Links */}
+        <ul className="flex space-x-4 text-white">
+          <li>
+            <Link
+              to="/allrecords"
+              className="hover:text-gray-300 transition duration-200"
+            >
+              All Records
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/attendancesubj"
+              className="hover:text-gray-300 transition duration-200"
+            >
+              Attendance Subj
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/missedclasses"
+              className="hover:text-gray-300 transition duration-200"
+            >
+              Missed Classes
+            </Link>
+          </li>
+        </ul>
+      </div>
+    </nav>
+                {/* <Outlet/> */}
 
-                    <h3>Today</h3>
-                    {Today_classes.map((element,index)=> {
-                        // array of objects
-                        return (
-                        <form id ={`myform:${index}`} key ={`myform:${index}`} onSubmit={submitHandler}>
-                                    <div id={`${index}`} key={index} 
-                                    // appropriate classes to be applied for this .
-                                    // className={element.status=="Yes"? "": element.status=="No" ? "":""}
-                                    >
-                                        <p id={`${index}subject`}>{element.subject}</p>
-                                        <p id={`${index}credit`}>{element.credit}</p>
-                                        <p id={`${index}proffesor`}>{element.proffesor}</p>
-                                        <p id={`${index}time`}>{element.time} </p>
-                                        <p id={`${index}venue`}>{element.venue}</p>
-                                
-                                        {element.status == "NULL" ? (
-                                                <>
-                                                    <label htmlFor="status">Did You attend the class?</label>
-                                                    <select id={`${index}status`} name="status">
-                                                        <option value="Yes">Yes</option>
-                                                        <option value="No">No</option>
-                                                    </select>
-                                                </>) : null
-                                        }
-                                        <input type="submit"/>
-                        </div>
-                        
-                    </form>)
-                        
-                    })
-                    }
-                    
-           
-            <div>
-                <div >
-                <h3>Yesterday</h3>
-                {Yest_classes.map((element,index)=> {
-                        // array of objects
-                        return (
-                        <div id={index} key={index} 
-                            className={element.status=="yes"? "":""}  >
-                            <p >Subject :{element.subject}</p>
-                            <p >Credit :{element.credit}</p>
-                            <p >Proffesor :{element.proffesor}</p>
-                            <p >Time :{element.time} </p>
-                            <p >Venue :{element.venue}</p>
-                        </div>)
-                        
-                    })
-                    }
-                    
-                </div>
-                <div>
-                <h3>Tomorrow</h3>
-                {Tom_classes.map((element,index)=> {
-                        // array of objects
-                        return (
-                        <div id={index} key={index} >
-                           <p >Subject :{element.subject}</p>
-                            <p >Credit :{element.credit}</p>
-                            <p >Proffesor :{element.proffesor}</p>
-                            <p >Time :{element.time} </p>
-                            <p >Venue :{element.venue}</p>
-                            
-                        </div>)
-                        
-                    })
-                    }
-                </div>
-            </div>
+               
 
         </>
     )

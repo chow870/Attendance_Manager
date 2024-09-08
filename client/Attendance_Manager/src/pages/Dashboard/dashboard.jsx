@@ -70,7 +70,86 @@ function Dashboard(){
 
     },[]);
     return (
-        <MainDashboard Today_classes={Today_classes} setToday_classes={setToday_classes} Tom_classes={Tom_classes} Yest_classes={Yest_classes}/>
+        <>
+
+
+<MainDashboard Today_classes={Today_classes} setToday_classes={setToday_classes} Tom_classes={Tom_classes} Yest_classes={Yest_classes}/>
+       
+
+       
+         <div className="p-8 space-y-4">
+      {/* Today's classes */}
+      <h2 className="text-xl font-bold mb-4">Today</h2>
+      {Today_classes.map((element, index) => (
+        <form
+          id={`myform:${index}`}
+          key={`myform:${index}`}
+          onSubmit={(e) => submitHandler(index, e)}
+          className={`p-4 rounded-lg shadow-lg transition-all transform hover:-rotate-3 hover:shadow-2xl bg-[#c084fc] text-black`}
+        >
+          <div
+            className={`p-4 rounded-lg ${element.status === 'Yes' ? 'bg-green-400' :element.status === 'No' ? 'bg-red-400' : ''}`}
+          >
+            <p>Subject: {element.subject}</p>
+            <p>Credit: {element.credit}</p>
+            <p>Professor: {element.professor}</p>
+            <p>Time: {element.time}</p>
+            <p>Venue: {element.venue}</p>
+
+            {element.status === 'NULL' && (
+              <>
+                <label htmlFor={`status-${index}`}>Did You attend the class?</label>
+                <select id={`status-${index}`} name="status" className="ml-2 p-1">
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+                <input type="submit" className="ml-4 p-1 bg-blue-500 text-white rounded" />
+              </>
+            )}
+          </div>
+        </form>
+      ))}
+
+      <div className="flex justify-between space-x-4 mt-8">
+        {/* Yesterday's classes */}
+        <div className="w-1/2">
+          <h3 className="text-xl font-bold mb-4">Yesterday</h3>
+          {Yest_classes.map((element, index) => (
+            <div
+              id={`yest-${index}`}
+              key={index}
+              className={`p-4 rounded-lg shadow-lg transition-all transform hover:-rotate-3 hover:shadow-2xl ${element.status === 'Yes' ? 'bg-green-400' : element.status === 'No' ? 'bg-red-200' : 'bg-[#fbcfe8]'}`}
+            >
+              <p>Subject: {element.subject}</p>
+              <p>Credit: {element.credit}</p>
+              <p>Professor: {element.professor}</p>
+              <p>Time: {element.time}</p>
+              <p>Venue: {element.venue}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Tomorrow's classes */}
+        <div className="w-1/2">
+          <h3 className="text-xl font-bold mb-4">Tomorrow</h3>
+          {Tom_classes.map((element, index) => (
+            <div
+              id={`tom-${index}`}
+              key={index}
+              className="p-4 rounded-lg shadow-lg transition-all transform hover:-rotate-3 hover:shadow-2xl bg-[#f0abfc]"
+            >
+              <p>Subject: {element.subject}</p>
+              <p>Credit: {element.credit}</p>
+              <p>Professor: {element.professor}</p>
+              <p>Time: {element.time}</p>
+              <p>Venue: {element.venue}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+         </>
+       
     )
     
     

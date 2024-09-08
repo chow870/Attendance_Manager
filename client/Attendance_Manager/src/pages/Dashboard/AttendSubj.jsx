@@ -27,7 +27,7 @@ function AttendSubj(){
                     return (
                     <div key={index}>
                         <h3>Subject : {element.subject}</h3>
-                        <DonutChart rec={[element.totalYes,element.totalNo]} percentage= {element.percentageAttended} />
+                        <DonutChart rec={[element.totalYes,element.totalNo]} percentage= {Math.floor(element.percentageAttended)} />
                         {/* <p>Classes Attended: {element.totalYes}</p>
                         <p>Classes Missed: {element.totalNo}</p> */}
                         {/* <p>Percentage : {element.percentageAttended}</p> */}

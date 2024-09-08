@@ -6,6 +6,11 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DonutChart = ({rec,percentage}) => {
+  useEffect(()=>{
+    console.log(rec);
+    console.log(percentage);
+
+  },[])
 
   // Data for Doughnut chart
   const data = {
