@@ -11,25 +11,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 function App() {
   return (
     <>
-      <>
-            
-                <Routes>
-                      <Route path="/" element={<RegistrationForm />} />
-                      {/* <Route path="/" element={<SignupForm />} /> */}
-                      <Route path="/Signin" element={<RegistrationForm />} />
-                      {/* <Route path="/signin/forms" element={<CustomisedSigninForm />} /> */}
-                      {/* <Route path="/SignOut" element={<SignOut />} /> */}
-                      <Route path="/Signup" element={<SignupForm />} />
-                      <Route path="/dashboard" element={<Dashboard />}/>
-                      <Route path="/allrecords" element={<AllRecords />} />
-                      <Route path="/attendancesubj" element={<AttendSubj />} />
-                      <Route path="/missedclasses" element={<MissedClasses />} />
-                      
-                </Routes>
-         
-       </>
-      
-      {/* <Dashboard/> */}
+     
       </>
     
   )
