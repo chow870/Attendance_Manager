@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 function MissedClasses(){
@@ -7,6 +7,7 @@ function MissedClasses(){
     const [subject,setSubject]=useState(["PHYSICS "]);
     const [startDate,setstartDate]=useState("");
     const [endDate,setendDate]=useState("");
+    const navigate= useNavigate();
 
     // useEffect(()=>{
     //     // here write to fetch all the subjects.
@@ -26,38 +27,41 @@ function MissedClasses(){
 
          
          let formData={
-            username:"Aditya ",
             sDate: startDate.length == 0 ? seDate: startDate,
             eDate: endDate.length == 0 ? seDate: endDate,
             subjects:values
          };
 
-       
-       
-        //  TODO : add the userName from the token available in the localHost.
         console.log("the form data is : ");
         console.log(formData);
-        // let {sdate,edate,selectedSubject}
         let selectedSubjectsString = encodeURIComponent(JSON.stringify(formData.subjects));
-// let response = await fetch(`/dashboard/classesMissed?sdate=${formData.sDate}&edate=${formData.eDate}&selectedSubjects=${selectedSubjectsString}`);
         try{
             let response =await fetch(`/dashboard/classesMissed?sdate=${formData.sDate}&edate=${formData.eDate}&selectedSubjects=${selectedSubjectsString}`,{
             method:"GET",
+  
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': localStorage.getItem('token')
+              }
             });
-            console.log("")
-            console.log("object created");
-            let data= await response.json();
-            setRecords(data.rec);
-            console.log("record updated");
+            if(response.ok){
+                console.log("object created");
+                let data= await response.json();
+                setRecords(data.rec);
+                console.log("record updated");
+
+            }
+            else{
+                navigate('/signin');
+            }
+          
         }
         catch(error){
             console.log("some Error Has occured while creation",error);
+            navigate('/dashboard');
 
         }
-        // so that i can fetch the new updated schedule and apply green or red color when rendered later.
+       
         
 }
     return (

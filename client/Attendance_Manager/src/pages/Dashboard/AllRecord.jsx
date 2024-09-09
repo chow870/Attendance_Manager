@@ -1,21 +1,35 @@
 import { useEffect,useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 function AllRecords(){
     const [records,setRecords]=useState([]);  
+    const navigate = useNavigate();
     useEffect(()=>{
         console.log("reached here");
-        async function GetAllRec(){
-            let response= await fetch("/dashboard/allrecords",{
-                method:"GET"
-                // here i have to pass the userName, useParams to fetch the userName
-            });
-            let data= await response.json();
-            // need to see how is the response in this.
-            console.log(data.recs);
-            setRecords(data.recs);
-            // thr data will be grouped by dates.
+        
+            async function GetAllRec(){
+                try{
+                let response= await fetch("/dashboard/allrecords",{
+                    method:"GET",
+                    headers: {
+                        'Authorization': localStorage.getItem('token')
+                      }
+                });
+                if(response.ok){
+                    let data= await response.json();
+                    console.log(data.recs);
+                    setRecords(data.recs);
+                }
+                else{
+                    navigate('/signin');
+
+                }
+            }
+            catch(error){
+                navigate('/dashboard');
+
+            }
         }
         GetAllRec();
 

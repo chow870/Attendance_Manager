@@ -3,18 +3,18 @@ import { Link,NavLink } from "react-router-dom"
 function NavbarDashboard(){
     return (
         <>
-          {/* for today wala done hai */}
+          
           <nav className="bg-black p-4">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Logo Section */}
+        
         <div className="text-white text-lg font-bold">
           <Link to="/dashboard">
-            {/* Replace this text with an actual logo image */}
+            
             <span>Company Logo</span>
           </Link>
         </div>
         
-        {/* Navigation Links */}
+       
         <ul className="flex space-x-4 text-white">
           <li>
             <NavLink
@@ -45,6 +45,14 @@ function NavbarDashboard(){
             >
               Missed Classes
             </NavLink>
+            <li>
+              <Link
+              to="/dashboard/signout"
+              >
+
+              </Link>
+            </li>
+            
           </li>
         </ul>
       </div>

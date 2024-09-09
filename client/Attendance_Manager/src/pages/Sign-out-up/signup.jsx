@@ -1,8 +1,11 @@
 import { useState,useEffect } from "react";
 import SignOut from "./signout";
+import { useNavigate } from "react-router-dom";
 function SignupForm(){
     const [username,setUsername]=useState("");
     const [password,setPassword]=useState("");
+    const navigate = useNavigate();
+    const [errorMessage,seterrorMessage]=useState("");
     async function handler(){
         let response= await fetch("/signup",{
             method:"POST",
@@ -14,18 +17,20 @@ function SignupForm(){
         if(response && response.ok){
             const data= await response.json();
             localStorage.setItem('token', data.token);
-            // navigate to dashboard.
-            alert("Navigate to the Dashboard");
+            navigate('/dashboard');
+            
 
         }
         else{
             if(response && response.status==400){
                 // navigate to sigin page plz/ new user
-                 alert("New User. Navigating to the New User Page");
+                 alert("New User. Navigating to the Signup Page");
+                 navigate('/signup');
+
             }
            else{
             // generate an alert to refresh the page
-            alert("Something Went Wrong, Plz Refresh the Page")
+            seterrorMessage("Wrong Password or Something went wrong. Refresh th page");
            }
         }
         
@@ -55,10 +60,10 @@ return (
         <button
           type="button"
           onClick={handler}
-          className="w-full p-2 bg-black text-white rounded hover:bg-gray-800 transition duration-200"
-        >
+          className="w-full p-2 bg-emerald-300 text-black rounded hover:bg-gray-800 transition duration-200">
           Submit
         </button>
+        {errorMessage.length != 0 ? <p>{errorMessage}</p> : <></>};
       </div>
     </div>
     <SignOut/>

@@ -1,24 +1,29 @@
 import { useState,useEffect } from "react";
 import "/home/chow228/Desktop/DEV/Attendance_Manager2/client/Attendance_Manager/src/cssClasses/greenred.css";
+import { useNavigate } from "react-router-dom";
 
 
 function MainDashboard(){
 
-  const [Today_classes, setToday_classes]=useState([]);
+    const [Today_classes, setToday_classes]=useState([]);
     const [Yest_classes, setYest_classes]=useState([]);
     const [Tom_classes, setTom_classes]=useState([]);
     const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    const [userName,setUsername]=useState("");
+    const navigate = useNavigate();
 
     // still you have to pass the token here to the validation and other purposes.
     useEffect(()=>{
         const d = new Date();
         async function fetchTheClassesToday(){
+          try{
             let day = weekday[d.getDay()];
             console.log(day);
             let response= await fetch(`/schedule/today?day=${day}`,{
                     method :"GET",
                     headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        'Authorization': localStorage.getItem('token')
                       },
                 }
             )
@@ -27,19 +32,30 @@ function MainDashboard(){
                 let data= await response.json(); // check how is data being sent by the Api.
                 console.log(data);
                  setToday_classes(data.result);
+                 setUsername(data.username);
             }
-            // setToday_classes(["hey there"]);
+            else{
+              navigate('/signin');
+            }
+          }
+          catch(error){
             console.log("now error here")
-            
+            navigate('/signin');
+           
+
+          }    
         }
         async function fetchTheClassesYest(){
+          try{
             let d2 = d.getDay()>0 ? d.getDay()-1 : 6;
             let day = weekday[d2];
             console.log(day);
             let response= await fetch(`/schedule/Yesterday?day=${day}`,{
                     method :"GET",
                     headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        'Authorization': localStorage.getItem('token')
+              
                       },
                 }
             )
@@ -48,14 +64,27 @@ function MainDashboard(){
             let data= await response.json(); // check how is data being sent by the Api.
             console.log(data);
              setYest_classes(data.result);}
+             else{
+                navigate('/signin');
+             }
+
+            }
+            
+            catch(error){
+              console.log("error : " ,error);
+              navigate('/signin');
+            }
         }
         async function fetchTheClassesTom(){
+          try{
             let day = weekday[(d.getDay()+1)%7];
             console.log(day);
             let response= await fetch(`/schedule/Tomorrow?day=${day}`,{
                     method :"GET",
                     headers: {
-                        "Content-Type": "application/x-www-form-urlencoded"
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        'Authorization': localStorage.getItem('token')
+              
                       },
                 }
             )
@@ -64,7 +93,17 @@ function MainDashboard(){
             let data= await response.json(); // check how is data being sent by the Api.
             console.log(data);
              setTom_classes(data.result);
-        }
+            }
+            else{
+              navigate('/signin');
+            }
+
+          }
+          catch(error){
+            console.log("error is : ", error);
+            navigate('/signin');
+          }
+            
         }
         fetchTheClassesToday();
         fetchTheClassesYest();
@@ -91,7 +130,7 @@ function MainDashboard(){
             status=="Yes"? div.classList.add("light-green") : div.classList.add("light-red");
 
              let formData={
-                username:"Aditya ",
+                username:userName,
                 subject: document.getElementById(`${index}subject`).textContent,
                 credit: document.getElementById(`${index}credit`).textContent,
                 professor: document.getElementById(`${index}proffesor`).textContent,
@@ -100,10 +139,6 @@ function MainDashboard(){
                 status:document.getElementById(`${index}status`).value,
                 date:arr[0]
              };
-
-           
-           
-            //  TODO : add the userName from the token available in the localHost.
 
             console.log(formData);
             try{
@@ -115,14 +150,11 @@ function MainDashboard(){
                 body:JSON.stringify(formData)
                 });
                 console.log("object created");
-                // await SetToday_class();
             }
             catch{
                 console.log("some Error Has occured while creation")
 
-            }
-            // so that i can fetch the new updated schedule and apply green or red color when rendered later.
-            
+            }            
     }
     
     return(

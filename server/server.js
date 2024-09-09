@@ -23,13 +23,155 @@ mongoose.connect("mongodb://localhost:27017/", {
 })
 .then(() => console.log('MongoDB connected successfully'))
 .catch(err => console.error('MongoDB connection error:', err));
+const authMiddleware = async (req, res, next) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+   
+    return res.sendStatus(401);
+  }
+
+  try {
+    
+    const decoded = jwt.verify(token, jwt_Passowrd); // Replace 'your-secret-key' with your JWT secret
+    const username = decoded.username;
+    const user = await UsersCred.findOne({ username });
+
+    if (!user) {
+      return res.sendStatus(401);
+    }
+    const isMatch = await bcrypt.compare(req.body.password, user.password);
+
+    if (!isMatch) {
+
+      return res.sendStatus(403);
+    }
+
+    req.user = { username: user.username };
+
+    next();
+  } catch (error) {
+    console.error(error);
+    return res.status(401).json({
+      msg: 'Invalid or expired token. Please log in again.',
+    });
+  }
+};
+
+// signin page
+app.post('/signup',async(req,res)=>{
+  const {username,password} = req.body;
+  try{
+    let user= await UsersCred.findOne({
+      username:username
+    });
+    if(!user){
+      return res.status(400).json({
+        msg:"A new user"
+      });
+    }
+    else{
+      // 
+      const isMatch = await bcrypt.compare(password, user.password);
+      if(isMatch){
+        var token= jwt.sign({username:username},jwt_Passowrd);
+        return res.status(200).json({ 
+            token:token
+         });
+      }
+      else{
+        return res.status(401).json({
+          msg: "invalid Password"
+        })
+      }
+  
+    }
+  }
+  catch(error){
+    console.error(error);
+    return res.status(401).json({
+      msg:"Refresh the page"
+    });
+
+  }
+  
 
 
-app.get("/dashboard/allrecords",async (req,res)=>{
+});
+
+app.get("/signin/check-username", async (req, res) => {
+  const username = req.query.username; // Accessing the query parameter
+  console.log("Request received at /signin/check-username");
+
+  try {
+      const existingUser = await UsersCred.findOne({ username: username });
+      if (existingUser) {
+          res.json({ isUnique: false });
+      } else {
+          res.json({ isUnique: true });
+      }
+  } catch (error) {
+      console.error("Error checking username:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+app.post('/signin/submit', async (req, res) => {
+  try {
+    const { username, dailyRecords } = req.body;
+    console.log(dailyRecords);
+
+    // Create a user document to insert
+    const user = new Users({
+      username: username,
+      DailyRecords: dailyRecords
+    });
+
+    const result = await user.save(); 
+
+    // Respond with success
+    res.status(200).json({ message: 'Record inserted successfully', data: result });
+  } catch (error) {
+    console.error('Error inserting record:', error);
+    res.status(500).json({ message: 'Error inserting record', error: error.message });
+  }
+});
+
+app.post("/signin/Credentials", async (req, res) => {
+  try{
+  const {username,password} = req.body; // Accessing the query parameter
+
+  // Example logic to check if the username is unique
+  // here i will have to check with the User_schema data base
+  const hashedPassword = await bcrypt.hash(password, 8)
+  console.log(password);
+  console.log(hashedPassword);
+
+  const Cred= new UsersCred({
+      username:username,
+      password:hashedPassword
+  });
+  const result = await Cred.save();
+  res.status(200).json({ message: 'Record inserted successfully', data: result,
+      Ok:"true"
+   });
+
+  }
+  catch (error){
+      console.error('Error inserting record:', error);
+      res.status(500).json({ message: 'Error inserting record', error: error.message,ok:"false" });
+
+  }
+});  
+
+
+app.get("/dashboard/allrecords",authMiddleware,async (req,res)=>{
     // here i am supposed to give all the records, grouped by the "date" and hide the username, sort in decreasing fashion by date
     // you have to give the username for this purpose.
     console.log("reached the backend of all records");
-    let username="Aditya ";
+
+    let username=req.user.username;
     async function getRecordsByUsername(username) {
         try {
             const records = await Record.aggregate([
@@ -68,7 +210,8 @@ app.get("/dashboard/allrecords",async (req,res)=>{
     
             console.log(records);
             return res.json({
-                "recs":records
+                "recs":records,
+                username:username
             });
         } catch (err) {
             console.error(err);
@@ -80,10 +223,8 @@ app.get("/dashboard/allrecords",async (req,res)=>{
 
 })
 
-app.get("/dashboard/attendance",async (req,res)=>{
-    // here i am supposed to give all the records, grouped by the "date" and hide the username, sort in decreasing fashion by date
-    // you have to give the username for this purpose.
-    let username="Aditya ";
+app.get("/dashboard/attendance",authMiddleware,async (req,res)=>{
+    let username=req.user.username;
     async function getAttendanceByUsername(username) {
         try {
             const attendance = await Record.aggregate([
@@ -146,7 +287,7 @@ app.get("/dashboard/attendance",async (req,res)=>{
 
 })
 
-app.get("/dashboard/classesMissed",async(req,res)=>{
+app.get("/dashboard/classesMissed",authMiddleware,async(req,res)=>{
   console.log("Received query parameters:", req.query);
   const sDate = req.query.sdate;
   const eDate = req.query.edate;
@@ -156,7 +297,7 @@ app.get("/dashboard/classesMissed",async(req,res)=>{
   console.log(eDate); // Should log the end date
   console.log(selectedSubjects); // Should log the array of selected subjects
   console.log("reached the backend")
-  const username="Aditya ";
+  let username=req.user.username;
 
     async function getFilteredRecords(username, sdate, edate, selectedSubjects) {
         try {
@@ -220,75 +361,9 @@ app.get("/dashboard/classesMissed",async(req,res)=>{
 
 
 })
-app.get("/signin/check-username", async (req, res) => {
-    const username = req.query.username; // Accessing the query parameter
-    console.log("Request received at /signin/check-username");
 
-    try {
-        const existingUser = await UsersCred.findOne({ username: username });
-        if (existingUser) {
-            res.json({ isUnique: false });
-        } else {
-            res.json({ isUnique: true });
-        }
-    } catch (error) {
-        console.error("Error checking username:", error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-});
-
-
-app.post('/signin/submit', async (req, res) => {
-    try {
-      const { username, dailyRecords } = req.body;
-      console.log(dailyRecords);
-  
-      // Create a user document to insert
-      const user = new Users({
-        username: username,
-        DailyRecords: dailyRecords
-      });
-
-      const result = await user.save(); 
-  
-      // Respond with success
-      res.status(200).json({ message: 'Record inserted successfully', data: result });
-    } catch (error) {
-      console.error('Error inserting record:', error);
-      res.status(500).json({ message: 'Error inserting record', error: error.message });
-    }
-  });
-
-app.post("/signin/Credentials", async (req, res) => {
-    try{
-    const {username,password} = req.body; // Accessing the query parameter
-  
-    // Example logic to check if the username is unique
-    // here i will have to check with the User_schema data base
-    const hashedPassword = await bcrypt.hash(password, 8)
-    console.log(password);
-    console.log(hashedPassword);
-
-    const Cred= new UsersCred({
-        username:username,
-        password:hashedPassword
-    });
-    const result = await Cred.save();
-    res.status(200).json({ message: 'Record inserted successfully', data: result,
-        Ok:"true"
-     });
-
-    }
-    catch (error){
-        console.error('Error inserting record:', error);
-        res.status(500).json({ message: 'Error inserting record', error: error.message,ok:"false" });
-
-    }
-  });  
-
-//   the routes for fetching the schedule of the days
-app.get("/schedule/today", async(req,res)=>{
-    const username = "Aditya ";  
+app.get("/schedule/today",authMiddleware, async(req,res)=>{
+  let username=req.user.username;
     const dayOfWeek = "Wednesday";  
     console.log("reached thed backend")
 
@@ -331,7 +406,8 @@ try{const pipeline = [
 let result = await Users.aggregate(pipeline);
 console.log("the output fetched is : ", result);
 return res.status(200).json({
-    result:result
+    result:result,
+    username:username
 });
 }
 catch(error){
@@ -341,8 +417,8 @@ catch(error){
 }
 });
 
-app.get("/schedule/Yesterday", async(req,res)=>{
-    const username = "Aditya ";  
+app.get("/schedule/Yesterday", authMiddleware,async(req,res)=>{
+  let username=req.user.username;  
     const dayOfWeek = req.query.day; 
 
 try{const pipeline = [
@@ -395,8 +471,8 @@ catch(error){
 }
 });
 
-app.get("/schedule/Tomorrow", async(req,res)=>{
-    const username = "Aditya ";  
+app.get("/schedule/Tomorrow",authMiddleware, async(req,res)=>{
+  let username=req.user.username; 
     const dayOfWeek = req.query.day;  
 
 try{const pipeline = [
@@ -448,7 +524,7 @@ catch(error){
 }
 });
 
-app.post('/dashboard/submit', async (req, res) => {
+app.post('/dashboard/submit', authMiddleware,async (req, res) => {
   try {
     const formData = req.body;
     console.log(formData);
@@ -464,45 +540,7 @@ app.post('/dashboard/submit', async (req, res) => {
 });
 
 // routes for SignUp and 
-app.post('/signup',async(req,res)=>{
-  const {username,password} = req.body;
-  try{
-    let user= await UsersCred.findOne({
-      username:username
-    });
-    if(!user){
-      return res.status(400).json({
-        msg:"A new user"
-      });
-    }
-    else{
-      // 
-      const isMatch = await bcrypt.compare(password, user.password);
-      if(isMatch){
-        var token= jwt.sign({username:username},jwt_Passowrd);
-        return res.status(200).json({ 
-            token:token
-         });
-      }
-      else{
-        return res.status(401).json({
-          msg: "invalid Password"
-        })
-      }
-  
-    }
-  }
-  catch(error){
-    console.error(error);
-    return res.status(401).json({
-      msg:"Refresh the page"
-    });
 
-  }
-  
-
-
-})
 
 app.listen(8080,()=>{
     console.log("listening at port : 8080");

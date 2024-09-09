@@ -1,22 +1,36 @@
 import { useEffect,useState } from "react";
-import { useParams } from 'react-router-dom';
 import DonutChart from "./doughnut";
+import { useNavigate } from "react-router-dom";
 
 
 
 function AttendSubj(){
-    const [records,setRecords]=useState([[{}]]);   
+    const [records,setRecords]=useState([[{}]]); 
+    const navigate = useNavigate();  
     useEffect(()=>{
         async function GetAllRec(){
-            let response= await fetch("/dashboard/attendance",{
-                method:"GET"
-                // here i have to pass the userName, useParams to fetch the userName
-            });
-            let data= await response.json();
-            // need to see how is the response in this.
-            console.log(data.attendance);
-            setRecords(data.attendance);
-            // thr data will be grouped by dates.
+            try{
+                let response= await fetch("/dashboard/attendance",{
+                    method:"GET",
+                    headers: {
+                        'Authorization': localStorage.getItem('token')
+                      }
+                });
+                if(response.ok){
+                    let data= await response.json();
+                    console.log(data.attendance);
+                    setRecords(data.attendance);
+
+                }
+                else{
+                    navigate('/signin');
+                }
+                
+
+            }
+            catch(error){
+                navigate('/dashoard');
+            } 
         }
         GetAllRec();
     },[]);
